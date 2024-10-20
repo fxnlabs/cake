@@ -70,9 +70,21 @@ where
 
     let llm_model = master.llm_model.as_mut().expect("LLM model not found");
 
-    for message in messages.0.messages {
+    // get prompt from all messages
+    let mut prompt = String::new();
+    let msglen = messages.0.messages.len();
+
+    for (i, message) in messages.0.messages.into_iter().enumerate() {
+        log::debug!("message: {message:?}");
+        prompt.push_str(&message.content);
+        if i < msglen - 1 {
+            prompt.push_str(" ");
+        }
         llm_model.add_message(message).unwrap();
     }
+
+    // set prompt to all messages
+    master.ctx.args.prompt = prompt;
 
     let mut resp = String::new();
 
