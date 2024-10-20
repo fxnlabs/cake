@@ -35,8 +35,17 @@ where
         move || {
             App::new()
                 .app_data(web::Data::new(state.clone()))
-                .route("/api/v1/chat/completions", web::post().to(generate_text::<TG, IG>))
+                .route(
+                    "/api/v1/chat/completions",
+                    web::post().to(generate_text::<TG, IG>),
+                )
                 .route("/api/v1/image", web::post().to(generate_image::<TG, IG>))
+                .route(
+                    "/alive",
+                    web::get().to(|_req: actix_web::HttpRequest| async move {
+                        HttpResponse::Ok().body("alive")
+                    }),
+                )
                 .default_service(web::route().to(not_found))
         }, //.wrap(actix_web::middleware::Logger::default()))
     )
