@@ -74,3 +74,6 @@ fastlane/test_output
 /*.sh
 .vscode/
 /images
+
+# ignore tilt.dev config
+tilt_config.json
